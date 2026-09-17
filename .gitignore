@@ -1,0 +1,18 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+
+# Rider
+.idea/
+
+# Build output
+[Bb]in/
+[Oo]bj/
+
+# Solution file
+*.slnx
+
+# Mod runtime log
+DuckovBetterActionCancel.log
