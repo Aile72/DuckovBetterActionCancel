@@ -5,7 +5,7 @@
 		<DuckovPath>D:\Steam\steamapps\common\Escape from Duckov</DuckovPath>
 		<SubPath>\Duckov_Data\Managed\</SubPath>
 		<Authors>Aile72</Authors>
-		<Version>1.0.1.0</Version>
+		<Version>1.0.2.0</Version>
 		<FileVersion>$(Version)</FileVersion>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<Copyright>Copyright (c) 2026 Aile72. All rights reserved.</Copyright>
