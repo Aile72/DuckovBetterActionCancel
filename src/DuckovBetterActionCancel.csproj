@@ -4,7 +4,6 @@
 		<Nullable>enable</Nullable>
 		<DuckovPath>D:\Steam\steamapps\common\Escape from Duckov</DuckovPath>
 		<SubPath>\Duckov_Data\Managed\</SubPath>
-		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<Authors>Aile72</Authors>
 		<Version>1.0.1.0</Version>
 		<FileVersion>$(Version)</FileVersion>
@@ -12,7 +11,6 @@
 		<Copyright>Copyright (c) 2026 Aile72. All rights reserved.</Copyright>
 		<RepositoryUrl>https://github.com/Aile72/DuckovBetterActionCancel</RepositoryUrl>
 		<GenerateDependencyFile>false</GenerateDependencyFile>
-		<FileVersion></FileVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 	  <DebugType>embedded</DebugType>
