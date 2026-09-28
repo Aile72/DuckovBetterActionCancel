@@ -5,9 +5,14 @@
 		<DuckovPath>D:\Steam\steamapps\common\Escape from Duckov</DuckovPath>
 		<SubPath>\Duckov_Data\Managed\</SubPath>
 		<Authors>Aile72</Authors>
-		<Version>1.0.2.0</Version>
-		<FileVersion>$(Version)</FileVersion>
-		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<InfoIniText>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\info.ini'))</InfoIniText>
+		<ModVersion>$([System.Text.RegularExpressions.Regex]::Replace($(InfoIniText), '(?sm)^.*?^version=([0-9][0-9.]*)[ \t]*\r?$.*$', '$1'))</ModVersion>
+		<ModVersionValid>$([System.Text.RegularExpressions.Regex]::IsMatch('$(ModVersion)', '^[0-9]+[.][0-9]+([.][0-9]+){0,2}$'))</ModVersionValid>
+		<BuildVersion Condition="'$(ModVersionValid)' == 'True'">$(ModVersion)</BuildVersion>
+		<BuildVersion Condition="'$(BuildVersion)' == ''">0.0.0</BuildVersion>
+		<Version>$(BuildVersion)</Version>
+		<FileVersion>$(BuildVersion)</FileVersion>
+		<AssemblyVersion>$(BuildVersion)</AssemblyVersion>
 		<Copyright>Copyright (c) 2026 Aile72. All rights reserved.</Copyright>
 		<RepositoryUrl>https://github.com/Aile72/DuckovBetterActionCancel</RepositoryUrl>
 		<GenerateDependencyFile>false</GenerateDependencyFile>
@@ -41,8 +46,17 @@
 		<None Include="$(PkgLib_Harmony)\lib\net472\0Harmony.dll" Link="0Harmony.dll" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>
 
+	<Target Name="ValidateModVersion" BeforeTargets="Restore;BeforeBuild">
+		<PropertyGroup>
+			<ModVersionHint Condition="'$(ModVersion.Length)' &lt;= '24'">$(ModVersion)</ModVersionHint>
+			<ModVersionHint Condition="'$(ModVersionHint)' == ''">unparsable text ($(ModVersion.Length) chars)</ModVersionHint>
+		</PropertyGroup>
+		<Error Condition="'$(ModVersionValid)' != 'True'" Text="info.ini: cannot read a numeric 'version=' value; found: $(ModVersionHint)" />
+	</Target>
+
 	<Target Name="ReportModOutput" AfterTargets="Build">
 		<Message Importance="high" Text="Mod output directory: $(TargetDir)" />
+		<Message Importance="high" Text="  version: $(ModVersion) (from info.ini)" />
 		<Message Importance="high" Text="  $(TargetName).dll" Condition="Exists('$(TargetDir)$(TargetName).dll')" />
 		<Message Importance="high" Text="  info.ini" Condition="Exists('$(TargetDir)info.ini')" />
 		<Message Importance="high" Text="  preview.png" Condition="Exists('$(TargetDir)preview.png')" />
