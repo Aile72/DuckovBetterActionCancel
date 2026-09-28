@@ -133,11 +133,6 @@ namespace DuckovBetterActionCancel
 
 			if (ReferenceEquals(current, newAction))
 			{
-				if (newAction.IsReady())
-				{
-					ActionInterrupt.TryCancel(__instance);
-				}
-
 				return;
 			}
 
@@ -152,6 +147,28 @@ namespace DuckovBetterActionCancel
 			}
 
 			ActionInterrupt.TryCancel(__instance);
+		}
+	}
+
+	[HarmonyPatch(typeof(CA_UseItem), nameof(CA_UseItem.SetUseItem))]
+	internal static class CA_UseItem_SetUseItem_Patch
+	{
+		[HarmonyPrefix]
+		private static void Prefix(CA_UseItem __instance, ItemStatsSystem.Item __0)
+		{
+			CharacterMainControl character = __instance.characterController;
+			if (!character || !__0)
+			{
+				return;
+			}
+
+			DuckovItemAgent heldAgent = character.CurrentHoldItemAgent;
+			if (heldAgent && heldAgent.Item == __0)
+			{
+				return;
+			}
+
+			ActionInterrupt.TryCancel(character);
 		}
 	}
 
