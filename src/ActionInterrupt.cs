@@ -34,8 +34,23 @@ namespace DuckovBetterActionCancel
 				return false;
 			}
 
+			if (character.isVehicle)
+			{
+				return false;
+			}
+
 			CharacterActionBase current = character.CurrentAction;
 			if (!current || !current.Running)
+			{
+				return false;
+			}
+
+			if (current is CA_ControlOtherCharacter)
+			{
+				return false;
+			}
+
+			if (current is CA_Interact interact && interact.InteractingTarget is Duckov.MiniGames.GamingConsole)
 			{
 				return false;
 			}
@@ -111,7 +126,7 @@ namespace DuckovBetterActionCancel
 			}
 
 			CharacterActionBase current = __instance.CurrentAction;
-			if (current == null || !current.Running || current is CA_Carry || !current.IsStopable())
+			if (current == null || !current.Running)
 			{
 				return;
 			}
@@ -152,11 +167,6 @@ namespace DuckovBetterActionCancel
 				return;
 			}
 
-			if (__instance.carryAction != null && __instance.carryAction.Running)
-			{
-				return;
-			}
-
 			if (__instance.GetInteractableTargetToInteract() == null)
 			{
 				if (!current.Running)
@@ -182,12 +192,17 @@ namespace DuckovBetterActionCancel
 				return;
 			}
 
-			if (!InputManager.InputActived)
+			CharacterMainControl character = __instance.characterController;
+			if (character)
 			{
-				return;
+				ItemAgent_Gun gun = character.GetGun();
+				if (gun && gun.BulletCount <= 0 && gun.IsReloading())
+				{
+					return;
+				}
 			}
 
-			ActionInterrupt.TryCancel(__instance.characterController);
+			ActionInterrupt.TryCancel(character);
 		}
 	}
 
